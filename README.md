@@ -35,3 +35,8 @@ I made a web application that serves to save things to do. In addition we have a
 `https://diegolibonati.github.io/DiegoLibonatiWeb/#/projects?q=ToDo%20Redux%20app%20page`
 
 ## Video
+
+
+
+https://user-images.githubusercontent.com/99032604/199861233-0a2873d1-06fd-495c-a0d3-6ea432c885a5.mp4
+
