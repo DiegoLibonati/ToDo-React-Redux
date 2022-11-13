@@ -32,7 +32,7 @@ I made a web application that serves to save things to do. In addition we have a
 
 ## Portfolio Link
 
-`https://diegolibonati.github.io/DiegoLibonatiWeb/#/projects?q=ToDo%20Redux%20app%20page`
+`https://diegolibonati.github.io/DiegoLibonatiWeb/#/projects?q=ToDo%20Redux%20App%20Page`
 
 ## Video
 
