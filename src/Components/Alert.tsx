@@ -1,12 +1,14 @@
-import React from "react";
-import "./Alert.css";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { resetAlert } from "../Store/Global/globalSlice";
+import { RootState, useAppDispatch } from "../Store/store";
+import "./Alert.css";
 
-export const Alert = () => {
-  const { messageAlert, typeAlert } = useSelector((state) => state.global);
-  const dispatch = useDispatch();
+export const Alert = (): JSX.Element => {
+  const { messageAlert, typeAlert } = useSelector(
+    (state: RootState) => state.global
+  );
+  const dispatch = useAppDispatch();
   return (
     <div
       className={

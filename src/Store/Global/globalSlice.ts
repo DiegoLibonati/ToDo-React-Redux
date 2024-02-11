@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { GlobalState, PayloadGlobal } from "../../entities/entities";
 
-const initialState = {
+const initialState: GlobalState = {
   sidebarMobile: false,
   modalAddCategory: false,
   modalAddTodo: false,
@@ -30,7 +31,10 @@ export const globalSlice = createSlice({
     closeModalAddTodo: (state) => {
       state.modalAddTodo = false;
     },
-    displayAlert: (state, action) => {
+    displayAlert: (
+      state,
+      action: PayloadAction<PayloadGlobal["displayAlert"]>
+    ) => {
       state.messageAlert = action.payload.message;
       state.typeAlert = action.payload.type;
     },

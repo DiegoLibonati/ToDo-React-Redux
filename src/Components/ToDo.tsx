@@ -1,35 +1,33 @@
-import "./todo.css";
 import { useSelector } from "react-redux";
 import { useTodo } from "../hooks/useTodo";
 import { getTodoCategories } from "../helpers/getTodoCategories";
 import { useMemo } from "react";
 import { ToDoView } from "../views/ToDoView";
 import { ToDoPresentation } from "../views/ToDoPresentation";
+import { RootState } from "../Store/store";
+import { Todo } from "../entities/entities";
+import "./todo.css";
 
-export const ToDo = () => {
-  const { todos, categoryTodo } = useSelector((state) => state.todos);
+export const ToDo = (): JSX.Element => {
+  const { todos, categoryTodo } = useSelector(
+    (state: RootState) => state.todos
+  );
 
   const { todosLocalStorage } = useTodo(todos);
 
-  const todoInformation = useMemo(() => {
+  const todoInformation: Todo[] = useMemo(() => {
     return getTodoCategories(todosLocalStorage, categoryTodo);
   }, [categoryTodo, todosLocalStorage]);
-
-  const {
-    category = "",
-    todosCategory = [],
-    icon = "",
-  } = todoInformation[0] || [];
 
   if (categoryTodo) {
     return (
       <ToDoView
-        icon={icon}
-        category={category}
-        todosCategory={todosCategory}
+        icon={todoInformation[0].icon}
+        category={todoInformation[0].category}
+        todosCategory={todoInformation[0].todosCategory}
       ></ToDoView>
     );
-  } else {
-    return <ToDoPresentation></ToDoPresentation>;
   }
+
+  return <ToDoPresentation></ToDoPresentation>;
 };

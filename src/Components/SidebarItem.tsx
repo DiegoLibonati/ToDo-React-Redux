@@ -1,4 +1,4 @@
-import React from "react";
+import { SidebarItemProps } from "../entities/entities";
 
 export const SidebarItem = ({
   onOpenCategoryTodo,
@@ -6,7 +6,7 @@ export const SidebarItem = ({
   category,
   todosCategory,
   index,
-}) => {
+}: SidebarItemProps) => {
   return (
     <>
       <li className="sidebar_nav_list_item">

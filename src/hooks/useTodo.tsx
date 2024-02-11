@@ -3,21 +3,20 @@ import { useDispatch } from "react-redux";
 import uuid from "react-uuid";
 import { getTodosLocalStorage } from "../helpers/getTodosLocalStorage";
 import { newCategoryTodo } from "../Store/Todos/todosSlice";
+import { Todo, UseTodo } from "../entities/entities";
 
-export const useTodo = (todos = getTodosLocalStorage()) => {
+export const useTodo = (todos: Todo[] = getTodosLocalStorage()): UseTodo => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  const setNewCategory = (newCategory) => {
+  const setNewCategory: UseTodo["setNewCategory"] = (newCategory) => {
     const keys = [];
 
     for (const key of Object.keys(newCategory)) {
-      if (newCategory[key]) {
-        keys.push(key);
-      }
+      keys.push(key);
     }
 
     if (Object.keys(newCategory).length === keys.length) {

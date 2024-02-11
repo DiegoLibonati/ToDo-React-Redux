@@ -1,38 +1,43 @@
 import "./Modal.css";
 import { FaWindowClose } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import {
   closeModalAddCategory,
   displayAlert,
 } from "../Store/Global/globalSlice";
-import Picker from "emoji-picker-react";
+import Picker, { IEmojiData } from "emoji-picker-react";
 import { useState } from "react";
 import { useForm } from "../hooks/useForm";
 import { useTodo } from "../hooks/useTodo";
+import { useAppDispatch } from "../Store/store";
 
-export const Modal = () => {
-  const dispatch = useDispatch();
-  const [chosenEmoji, setChosenEmoji] = useState("");
+export const Modal = (): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const [chosenEmoji, setChosenEmoji] = useState<IEmojiData | null>(null);
 
   const { setNewCategory } = useTodo();
 
-  const { formState, onInputChange, onResetForm } = useForm({
+  const { formState, onInputChange, onResetForm } = useForm<{
+    categoryName: string;
+  }>({
     categoryName: "",
   });
 
-  const onEmojiClick = (event, emojiObject) => {
+  const onEmojiClick: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    data: IEmojiData
+  ) => void = (_, emojiObject) => {
     setChosenEmoji(emojiObject);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
-    const emoji = chosenEmoji.emoji;
+    const emoji = chosenEmoji?.emoji;
     const nameCategory = formState.categoryName;
 
     setNewCategory({
       category: nameCategory,
-      emoji: emoji,
+      emoji: emoji!,
     });
 
     onResetForm();
@@ -56,7 +61,7 @@ export const Modal = () => {
         className="modal_form animate__animated animate__fadeIn"
         onSubmit={(e) => onSubmit(e)}
       >
-        <Picker className="emoji_picker" onEmojiClick={onEmojiClick} />
+        <Picker onEmojiClick={onEmojiClick} />
         <input
           className="modal_input"
           placeholder="Category Name"

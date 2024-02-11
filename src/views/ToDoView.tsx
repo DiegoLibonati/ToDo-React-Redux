@@ -1,16 +1,24 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { FaPlus, FaRegPaperPlane } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Loader } from "../Components/Loader";
 import { ModalAddTodo } from "../Components/ModalAddTodo";
 import { ToDoItem } from "../Components/ToDoItem";
 import { closeSidebar, openModalAddTodo } from "../Store/Global/globalSlice";
+import { ToDoViewProps } from "../entities/entities";
+import { RootState, useAppDispatch } from "../Store/store";
 
-export const ToDoView = ({ icon, category, todosCategory }) => {
-  const dispatch = useDispatch();
-  const { sidebarMobile, modalAddTodo } = useSelector((state) => state.global);
-  const { isSaving } = useSelector((state) => state.todos);
+export const ToDoView = ({
+  icon,
+  category,
+  todosCategory,
+}: ToDoViewProps): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const { sidebarMobile, modalAddTodo } = useSelector(
+    (state: RootState) => state.global
+  );
+  const { isSaving } = useSelector((state: RootState) => state.todos);
 
   const dateString = useMemo(() => {
     const newDate = new Date();

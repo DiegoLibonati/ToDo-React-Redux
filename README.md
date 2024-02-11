@@ -14,9 +14,10 @@ I made a web application that serves to save things to do. In addition we have a
 ## Technologies used
 
 1. React JS
-2. CSS3
-3. REDUX
-4. REDUX-TOOLKIT
+2. Typescript
+3. CSS3
+4. REDUX
+5. REDUX-TOOLKIT
 
 ## Portfolio Link
 
@@ -28,23 +29,35 @@ https://user-images.githubusercontent.com/99032604/199861233-0a2873d1-06fd-495c-
 
 ## Documentation
 
-### views/ToDoPresentation.jsx | views/ToDoView.jsx
+### views/ToDoPresentation.tsx | views/ToDoView.tsx
 
-These views will be those in which it is rendered on the same place depending on where the user is standing. At the beginning it is on the `ToDoPresentation.jsx` view since all the categories will be displayed. If the user clicks on a category, it will go to the view `ToDoView.jsx`.
+These views will be those in which it is rendered on the same place depending on where the user is standing. At the beginning it is on the `ToDoPresentation.tsx` view since all the categories will be displayed. If the user clicks on a category, it will go to the view `ToDoView.tsx`.
 
-### Store | globalSlice.js and todosSlice.js
+### Store | globalSlice.ts and todosSlice.ts
 
-Here we will find two types of slice that are saved in the store. We have the `globalSlice.js` which will be in charge of containing the states and the reducers of global functions such as modals or alert operation etc. While the Slice of `todosSlice.js` takes care of the main functionality of this application, saving the state of the ToDos and also its reducers to be able to handle them.
+Here we will find two types of slice that are saved in the store. We have the `globalSlice.ts` which will be in charge of containing the states and the reducers of global functions such as modals or alert operation etc. While the Slice of `todosSlice.ts` takes care of the main functionality of this application, saving the state of the ToDos and also its reducers to be able to handle them.
 
-### hooks/useForm.js
+### hooks/useForm.tsx
 
-The `useForm.js` we will use to handle all the forms of our application. In it you can save the value of the inputs, reset them to their default value and check if they are changing:
+The `useForm.tsx` we will use to handle all the forms of our application. In it you can save the value of the inputs, reset them to their default value and check if they are changing:
 
 ```
-export const useForm = (initialForm = {}) => {
+import { useState } from "react";
+import { UseForm } from "../entities/entities";
+
+export const useForm = <T,>(initialForm: T): UseForm<T> => {
   const [formState, setFormState] = useState(initialForm);
 
-  const onInputChange = ({ target }) => {
+  const onInputChange = ({ target }: { target: HTMLInputElement }) => {
+    const { name, value } = target;
+
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
+
+  const onTextAreaChange = ({ target }: { target: HTMLTextAreaElement }) => {
     const { name, value } = target;
 
     setFormState({
@@ -60,53 +73,62 @@ export const useForm = (initialForm = {}) => {
   return {
     formState,
     onInputChange,
+    onTextAreaChange,
     onResetForm,
   };
 };
 ```
 
-### hooks/useMatchMedia.js
+### hooks/useMatchMedia.tsx
 
-We will use the `useMatchMedia.js` to check when a user changes from one resolution to another:
+We will use the `useMatchMedia.tsx` to check when a user changes from one resolution to another:
 
 ```
-export function useMediaQuery(mediaQueryString) {
+import { useEffect, useMemo, useState } from "react";
+import { UseMatchMedia } from "../entities/entities";
+
+export function useMediaQuery(mediaQueryString: string): UseMatchMedia {
   const queryString = removeReservedMediaKeyWord(mediaQueryString);
   const query = useMemo(() => window.matchMedia(queryString), [queryString]);
-  const [matches, setMatches] = useState(query.matches);
+  const [matches, setMatches] = useState<boolean>(query.matches);
 
   useEffect(() => {
-    const listener = (e) => setMatches(e.matches);
-    query.addEventListener("change", listener);
-    return () => query.removeEventListener("change", listener);
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
+    query.addEventListener("change", (e) => listener(e));
+    return () => query.removeEventListener("change", (e) => listener(e));
   }, [query]);
   return { matches };
 }
 
-function removeReservedMediaKeyWord(mediaQueryString) {
+function removeReservedMediaKeyWord(mediaQueryString: string): string {
   return mediaQueryString.replace("@media", "").trim();
 }
 ```
 
-### hooks/useTodo.js
+### hooks/useTodo.tsx
 
-We will use the `useTodo.js` to be able to save new categories of ToDos:
+We will use the `useTodo.tsx` to be able to save new categories of ToDos:
 
 ```
-export const useTodo = (todos = getTodosLocalStorage()) => {
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import uuid from "react-uuid";
+import { getTodosLocalStorage } from "../helpers/getTodosLocalStorage";
+import { newCategoryTodo } from "../Store/Todos/todosSlice";
+import { Todo, UseTodo } from "../entities/entities";
+
+export const useTodo = (todos: Todo[] = getTodosLocalStorage()): UseTodo => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  const setNewCategory = (newCategory) => {
+  const setNewCategory: UseTodo["setNewCategory"] = (newCategory) => {
     const keys = [];
 
     for (const key of Object.keys(newCategory)) {
-      if (newCategory[key]) {
-        keys.push(key);
-      }
+      keys.push(key);
     }
 
     if (Object.keys(newCategory).length === keys.length) {
@@ -130,25 +152,24 @@ export const useTodo = (todos = getTodosLocalStorage()) => {
     setNewCategory,
   };
 };
-
 ```
 
-### helpers/categoriesData.js
+### helpers/categoriesData.ts
 
-In `categoriesData.js` we are going to preload the categories that we want to come by default when a user never entered.
+In `categoriesData.ts` we are going to preload the categories that we want to come by default when a user never entered.
 
-### helpers/getNamesTodoCategories.js
+### helpers/getNamesTodoCategories.ts
 
-`getNamesTodoCategories.js` will allow us to obtain the name of each category along with its icon.
+`getNamesTodoCategories.ts` will allow us to obtain the name of each category along with its icon.
 
-### helpers/getTodoCategories.js
+### helpers/getTodoCategories.ts
 
-`getTodoCategories.js` will allow us to obtain all the categories that exist.
+`getTodoCategories.ts` will allow us to obtain all the categories that exist.
 
-### helpers/getTodoEdit.js
+### helpers/getTodoEdit.ts
 
 `getTodoEdit.js` will allow us to get the todo that was modified.
 
-### helpers/getTodosLocalStorage.js
+### helpers/getTodosLocalStorage.ts
 
-`getTodosLocalStorage.js` will return the todos that we have stored in LocalStorage if we enter this application at some point and if not, it will preload the ToDos from `categoriesData.js`.
+`getTodosLocalStorage.ts` will return the todos that we have stored in LocalStorage if we enter this application at some point and if not, it will preload the ToDos from `categoriesData.ts`.

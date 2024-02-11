@@ -5,7 +5,6 @@ import {
   FaCalendar,
   FaCalendarCheck,
 } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import {
   doneTodo,
   goToImportantTodo,
@@ -13,9 +12,16 @@ import {
   removeTodo,
 } from "../Store/Todos/todosSlice";
 import { displayAlert, openModalAddTodo } from "../Store/Global/globalSlice";
+import { ToDoItemProps } from "../entities/entities";
+import { useAppDispatch } from "../Store/store";
 
-export const ToDoItem = ({ id, content, category, done }) => {
-  const dispatch = useDispatch();
+export const ToDoItem = ({
+  id,
+  content,
+  category,
+  done,
+}: ToDoItemProps): JSX.Element => {
+  const dispatch = useAppDispatch();
 
   const todo = {
     id: id,
@@ -23,12 +29,12 @@ export const ToDoItem = ({ id, content, category, done }) => {
     done: done,
   };
 
-  const onEdit = () => {
+  const onEdit: React.MouseEventHandler<SVGElement> = () => {
     dispatch(inputTodoChange(content));
     dispatch(openModalAddTodo());
   };
 
-  const onMoveToImportant = () => {
+  const onMoveToImportant: React.MouseEventHandler<SVGElement> = () => {
     dispatch(
       displayAlert({
         message: `${todo.id} was successfully moved to Important!`,
@@ -38,7 +44,7 @@ export const ToDoItem = ({ id, content, category, done }) => {
     dispatch(goToImportantTodo({ todo, category }));
   };
 
-  const onRemoveTodo = () => {
+  const onRemoveTodo: React.MouseEventHandler<SVGElement> = () => {
     dispatch(removeTodo({ id, category }));
     dispatch(
       displayAlert({

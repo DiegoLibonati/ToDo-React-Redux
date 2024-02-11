@@ -6,9 +6,10 @@ import uuid from "react-uuid";
 import { ToDoPresentantionButton } from "../Components/ToDoPresentantionButton";
 import { useMediaQuery } from "../hooks/useMatchMedia";
 import "../Components/todopresentation.css";
+import { RootState } from "../Store/store";
 
-export const ToDoPresentation = () => {
-  const { todos } = useSelector((state) => state.todos);
+export const ToDoPresentation = (): JSX.Element | null => {
+  const { todos } = useSelector((state: RootState) => state.todos);
 
   const { matches } = useMediaQuery(
     "@media only screen and (min-width: 1024px)"
@@ -34,4 +35,6 @@ export const ToDoPresentation = () => {
       </main>
     );
   }
+
+  return null;
 };

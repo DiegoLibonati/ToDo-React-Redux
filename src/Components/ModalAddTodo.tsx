@@ -1,5 +1,5 @@
 import { FaWindowClose } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { closeModalAddTodo, displayAlert } from "../Store/Global/globalSlice";
 import { useForm } from "../hooks/useForm";
 import uuid from "react-uuid";
@@ -11,12 +11,18 @@ import {
 } from "../Store/Todos/todosSlice";
 import { useMemo } from "react";
 import { getTodoEdit } from "../helpers/getTodoEdit";
+import { ModalAddTodoProps } from "../entities/entities";
+import { RootState, useAppDispatch } from "../Store/store";
 
-export const ModalAddTodo = ({ category, icon, todosCategory }) => {
-  const dispatch = useDispatch();
-  const { todoEdit } = useSelector((state) => state.todos);
+export const ModalAddTodo = ({
+  category,
+  icon,
+  todosCategory,
+}: ModalAddTodoProps): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const { todoEdit } = useSelector((state: RootState) => state.todos);
 
-  const { onInputChange, formState } = useForm({
+  const { onTextAreaChange, formState } = useForm<{ todo: string }>({
     todo: todoEdit,
   });
 
@@ -24,7 +30,7 @@ export const ModalAddTodo = ({ category, icon, todosCategory }) => {
     return getTodoEdit(todosCategory, todoEdit);
   }, [todoEdit, todosCategory]);
 
-  const onSubmit = (e) => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
     if (!todoEdit) {
@@ -83,9 +89,8 @@ export const ModalAddTodo = ({ category, icon, todosCategory }) => {
           {category}
         </h2>
         <textarea
-          type="text"
           name="todo"
-          onChange={onInputChange}
+          onChange={onTextAreaChange}
           value={formState.todo}
         ></textarea>
 

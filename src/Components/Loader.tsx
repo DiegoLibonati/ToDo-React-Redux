@@ -1,5 +1,5 @@
 import "./Loader.css";
 
-export const Loader = () => {
+export const Loader = (): JSX.Element => {
   return <div className="loader"></div>;
 };
