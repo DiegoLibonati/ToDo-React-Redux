@@ -1,4 +1,4 @@
-# ToDo-Redux-App-Page
+# ToDo React Redux
 
 ## Getting Started
 
@@ -21,7 +21,7 @@ I made a web application that serves to save things to do. In addition we have a
 
 ## Portfolio Link
 
-[`https://www.diegolibonati.com.ar/#/project/12`](https://www.diegolibonati.com.ar/#/project/12)
+[`https://www.diegolibonati.com.ar/#/project/ToDo-React-Redux`](https://www.diegolibonati.com.ar/#/project/ToDo-React-Redux)
 
 ## Video
 
